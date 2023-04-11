@@ -6,7 +6,7 @@ const Header = () => {
   // console.log(user.name);
   const checkLogout = () => {
     sessionStorage.removeItem("user");
-    navigate('/')
+    window.location.reload()
   }
 
   return (
@@ -38,7 +38,7 @@ const Header = () => {
               </Link>
             </div>)}</div>
             <div>
-              {(user && user.role == "admin") ? (<div className="text-white rounded-lg py-2 font-bold hover:bg-red-700 flex items-center space-x-2 text-sm md:text-base mx-4"><Link to={'/admin'}>Trang quan tri</Link></div>) : ''}
+              {(user && user?.role == "admin") ? (<div className="text-white rounded-lg py-2 font-bold hover:bg-red-700 flex items-center space-x-2 text-sm md:text-base mx-4"><Link to={'/admin'}>Trang quan tri</Link></div>) : ''}
             </div>
           </form>
 

@@ -16,7 +16,7 @@ import EditCategory from './components/Admin/category/edit/edit'
 
 function App() {
   const [count, setCount] = useState(0)
-  const user = JSON.parse(sessionStorage.getItem('user'))
+  const user = JSON.parse(sessionStorage.getItem('user')!)
   // console.log(user.role);
   return (
     <BrowserRouter>
@@ -29,7 +29,7 @@ function App() {
           <Route path='chi-tiet/:id' element={<DetailProductPage />} />
         </Route>
 
-        <Route path='/admin' element={user.role === "admin" ? (<LayoutAdmin />) : (<ErrorPage />)}>
+        <Route path='/admin' element={user?.role === "admin" ? (<LayoutAdmin />) : (<ErrorPage />)}>
           < Route index element={<HomeProduct />} /> {/* admin Layout */}
           <Route path='add' element={<AddProduct />} />
           <Route path='edit/:id' element={<EditProduct />} />
