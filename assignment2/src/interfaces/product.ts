@@ -6,7 +6,7 @@ export interface IProduct {
     original_price: number,
     description: string,
     images: { base_url: string }[],
-    brand: { id: number, name: string, slug: string },
+    brand: { _id: string, name: string, slug: string },
     specifications: ISpecification[],
     short_description: string,
 

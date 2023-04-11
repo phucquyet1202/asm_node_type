@@ -29,7 +29,7 @@ function App() {
           <Route path='chi-tiet/:id' element={<DetailProductPage />} />
         </Route>
 
-        <Route path='/admin' element={user?.role === "admin" ? (<LayoutAdmin />) : (<ErrorPage />)}>
+        <Route path='/admin' element={user.role === "admin" ? (<LayoutAdmin />) : (<ErrorPage />)}>
           < Route index element={<HomeProduct />} /> {/* admin Layout */}
           <Route path='add' element={<AddProduct />} />
           <Route path='edit/:id' element={<EditProduct />} />

@@ -6,6 +6,7 @@ import { IProduct } from '../../../../interfaces/product';
 import { Option } from 'antd/es/mentions';
 import { addProduct } from '../../../../api/product';
 import { useNavigate } from 'react-router-dom';
+import ICategory from '../../../../interfaces/category';
 const AddProduct = () => {
     const navigate = useNavigate()
     const onFinish = async (values: IProduct) => {
@@ -31,7 +32,7 @@ const AddProduct = () => {
 
 
 
-    const [cate, setCate] = useState<IProduct[]>([])
+    const [cate, setCate] = useState<ICategory[]>([])
     const getCate = async () => {
         try {
             const { data } = await getAllCate()
@@ -102,13 +103,13 @@ const AddProduct = () => {
                         <Form.Item
                             label='Danh Mục'
                             noStyle
-                            name="name"
+                            name="brand"
                             rules={[{ required: true, message: 'Province is required' }]}
                         >
                             <Select placeholder="Danh mục">
                                 {cate.map((item) => {
                                     return (
-                                        <Option value={item.brand?.name}>{item.name}</Option>
+                                        <Option value={item._id}>{item.name}</Option>
                                     )
                                 })}
 

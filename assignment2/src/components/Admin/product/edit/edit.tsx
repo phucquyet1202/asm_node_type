@@ -129,7 +129,7 @@ const EditProduct = () => {
                         <Form.Item
                             label='Danh Mục'
                             noStyle
-                            name="categoryId"
+                            name="brand"
                             rules={[{ required: true, message: 'Province is required' }]}
                         >
                             <Select placeholder="Danh mục" >
