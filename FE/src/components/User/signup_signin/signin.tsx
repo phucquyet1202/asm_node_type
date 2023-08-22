@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from 'react-router-dom';
 import { signinUser } from '../../../api/user'
 import { message } from 'antd'
+// import { AxiosResponse } from 'axios';
+
 import ISignin from '../../../interfaces/signin';
 
 const Signin = () => {
@@ -18,21 +20,17 @@ const Signin = () => {
     const checkSignin = async (user: ISignin) => {
 
         try {
-            const users = await signinUser(user)
-            console.log(users);
-            if (users) {
-                message.success('Đăng nhập thành công')
-                localStorage.setItem('token', users.data.token)
+            let checkLogin = await signinUser(user);
+            if (checkLogin) {
+                message.success('Đăng nhập thành công!');
                 setTimeout(() => {
-
                     navigate('/')
-
-                }, 1000)
+                }, 1000);
             } else {
-                throw new Error('Đăng nhập không thành công')
+                throw new Error('Đăng nhập thất bại!');
             }
         } catch (error: any) {
-            message.error(error.message)
+            message.error(error.message);
         }
     }
 

@@ -27,7 +27,7 @@ const Header = () => {
             </div>
             <div className="px-3 text-[20px] text-white">
               <i className="fa-solid fa-user"></i>
-
+              {/* <Link to={'/search'}><i className="fa-solid fa-user"></i></Link> */}
             </div>
             <div>{user ? (<div className="text-white rounded-lg py-2 font-bold">{user.name}/<button className="text-white rounded-lg py-2 font-bold hover:bg-red-700  space-x-2 text-sm md:text-base" onClick={() => checkLogout()}>Đăng xuất</button></div>) : (<div className="flex items-center space-x-2 ml-3">
               <Link to={"/signin"} className="text-white rounded-lg py-2 font-bold hover:bg-red-700 flex items-center space-x-2 text-sm md:text-base">

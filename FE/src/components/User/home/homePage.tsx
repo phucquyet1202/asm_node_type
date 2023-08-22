@@ -8,6 +8,7 @@ const HomePage = () => {
 
     const fetchProducts = async () => {
         const { data } = await getAll()
+        // console.log(data);
         setProducts(data)
     }
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import Product from "../models/product";
 import Category from "../models/category";
 import Joi from "joi";
+import loda from 'lodash'
 import { productSchema } from "../Schema/Schema_product";
 export const getAll = async (req, res) => {
     try {
@@ -97,3 +98,28 @@ export const remove = async (req, res) => {
         });
     }
 };
+
+// tim kiem
+// export const search = async (req, res) => {
+//     try {
+//         const searchQuery = req.params.name.toLowerCase();
+//         const products = await Product.find({});
+//         const filteredProducts = products.filter((product) => {
+//             return product.name.toLowerCase().includes(searchQuery);
+//         });
+//         if (filteredProducts.length === 0) {
+//             return res.status(404).json({
+//                 message: 'Không tìm thấy sản phẩm',
+//             });
+//         }
+//         return res.status(200).json({
+//             message: 'Tìm kiếm sản phẩm thành công',
+//             products: filteredProducts,
+//         });
+//     } catch (error) {
+//         return res.status(500).json({
+//             message: 'Lỗi server',
+//             error: error,
+//         });
+//     }
+// }

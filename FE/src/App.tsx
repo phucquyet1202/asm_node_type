@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import UserLayout from './components/User/layout/UserLayout'
 import HomePage from './components/User/home/homePage'
 import Signup from './components/User/signup_signin/signup'
@@ -13,11 +13,14 @@ import AddCategory from './components/Admin/category/add/addCate'
 import LayoutAdmin from './components/Admin/layout/layout_admin'
 import ErrorPage from './components/User/errorPage/errorPage'
 import EditCategory from './components/Admin/category/edit/edit'
+import { message } from 'antd'
+import Cart from './components/User/cart/cart'
 
 function App() {
   const [count, setCount] = useState(0)
   const user = JSON.parse(sessionStorage.getItem('user')!)
-  // console.log(user.role);
+
+  console.log(user);
   return (
     <BrowserRouter>
       <Routes>
@@ -27,6 +30,8 @@ function App() {
         <Route path='/' element={<UserLayout />}> {/* user Layout */}
           <Route index element={<HomePage />} />
           <Route path='chi-tiet/:id' element={<DetailProductPage />} />
+          <Route path='cart' element={<Cart />} />
+
         </Route>
 
         <Route path='/admin' element={user?.role === "admin" ? (<LayoutAdmin />) : (<ErrorPage />)}>

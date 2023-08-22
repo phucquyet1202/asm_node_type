@@ -9,5 +9,7 @@ router.get("/products/:id", get);
 router.post("/products", checkPermission, create);
 router.put("/products/:id", checkPermission, update);
 router.delete("/products/:id", checkPermission, remove);
+// router.get("/products?name=:name", search);
+
 
 export default router;
