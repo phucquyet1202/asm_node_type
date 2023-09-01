@@ -1,35 +1,56 @@
-import instance from ".";
-import ICategory from "../interfaces/category";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+const categoryApi = createApi({
+  reducerPath: "category",
+  tagTypes: ["Category"],
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://127.0.0.1:8080",
+    prepareHeaders(headers) {
+      const token = localStorage.getItem("token");
 
-
-export const getAllCate = () => {
-    return instance.get("/category")
-}
-
-export const addCate = (cate: ICategory) => {
-    return instance.post("/category", cate, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-        }
-    })
-}
-
-export const getCateById = (id: string) => {
-    return instance.get(`/category/${id}`)
-}
-
-export const deleteCate = (id: string) => {
-    return instance.delete(`/category/${id}`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-    })
-}
-
-export const editCate = (cate: ICategory, id: string) => {
-    return instance.put(`/category/${id}`, cate, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-    })
-}
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    getAllCate: builder.query<any, void>({
+      query: () => "/category",
+      providesTags: ["Category"],
+    }),
+    getOneCate: builder.query<any, any>({
+      query: (id) => `/products/${id}`,
+      providesTags: ["Category"],
+    }),
+    removeCate: builder.mutation<any, any>({
+      query: (id) => ({
+        url: `/category/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Category"],
+    }),
+    addCate: builder.mutation<any, any>({
+      query: (pro) => ({
+        url: `/category`,
+        method: "POST",
+        body: pro,
+      }),
+      invalidatesTags: ["Category"],
+    }),
+    updateCate: builder.mutation<any, any>({
+      query: (pro) => ({
+        url: `/category/${pro._id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Category"],
+    }),
+  }),
+});
+export const {
+  useGetAllCateQuery,
+  useGetOneCateQuery,
+  useRemoveCateMutation,
+  useAddCateMutation,
+  useUpdateCateMutation,
+} = categoryApi;
+export default categoryApi;

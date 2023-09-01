@@ -1,14 +1,13 @@
+import { useEffect, useState } from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom"
+import { useGetUserByTokenMutation } from "../../../api/user"
 
-const Header = () => {
+const Header = ({ user }: any) => {
   const navigate = useNavigate()
-  const user = JSON.parse(sessionStorage.getItem("user")!)
-  // console.log(user.name);
   const checkLogout = () => {
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("token");
     window.location.reload()
   }
-
   return (
     <div className="bg-[#D70018] w-full ">
       <div className='container mx-auto flex items-center gap-6'>

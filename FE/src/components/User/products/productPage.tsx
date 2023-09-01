@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { IProduct } from '../../../interfaces/product'
-import { getAll } from '../../../api/product'
 import { Link } from 'react-router-dom'
 type Props = {
     data: IProduct
@@ -18,8 +17,8 @@ const ProductPage = ({ data }: Props) => {
                         {data.name}
                     </h3>
 
-                    <span className='text-red-500 font-semibold px-7'>{data.price}</span>
-                    <span className='text-gray-400 mx-3'>{data.original_price}</span>
+                    <span className='text-red-500 font-semibold sm:px-3 xl:px-8'>{data.price?.toLocaleString("vi-VN")}đ</span>
+                    <span className='text-gray-400 mx-3'>{data.original_price?.toLocaleString("vi-VN")}đ</span>
                     <div className='flex my-3 px-7'>
                         <img src="/Vector.png" alt="" />
                         <img src="/Vector.png" alt="" />
@@ -27,7 +26,7 @@ const ProductPage = ({ data }: Props) => {
                         <img src="/Vector.png" alt="" />
                         <img src="/Vector.png" alt="" />
                     </div>
-                    <p className='text-gray-400  lg:mx-28 md:mx-16 px-12 w-full -my-6'>
+                    <p className='text-gray-400  lg:mx-28 md:mx-16 px-12 w-full -my-7'>
                         72 đánh giá
                     </p>
                 </Link>

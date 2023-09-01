@@ -4,10 +4,10 @@ import { Button, Image, Layout, Menu, Popconfirm, Space, Table, Tag, message, th
 import { ColumnsType } from 'antd/es/table';
 import { Link, useNavigate } from 'react-router-dom';
 import SideBar from '../../sideBar/sideBar';
-import { deleteCate, getAllCate } from '../../../../api/category';
+// import { deleteCate, getAllCate } from '../../../../api/category';
 import ICategory from '../../../../interfaces/category';
 import { IProduct } from '../../../../interfaces/product';
-import { getAll } from '../../../../api/product';
+// import { getAll } from '../../../../api/product';
 const HomeCategory: React.FC = () => {
     const navigate = useNavigate()
     const { Header, Content, Footer, Sider } = Layout;
@@ -20,21 +20,21 @@ const HomeCategory: React.FC = () => {
 
 
     const checkDelete = async (id: string) => {
-        try {
-            const data = await deleteCate(id)
-            if (data) {
-                message.success('xóa thành công')
-                setTimeout(() => {
-                    navigate("/admin/cate")
-                    window.location.reload()
-                }, 1000);
-            } else {
-                throw new Error('xóa sản phẩm thất bại')
-            }
+        // try {
+        //     const data = await deleteCate(id)
+        //     if (data) {
+        //         message.success('xóa thành công')
+        //         setTimeout(() => {
+        //             navigate("/admin/cate")
+        //             window.location.reload()
+        //         }, 1000);
+        //     } else {
+        //         throw new Error('xóa sản phẩm thất bại')
+        //     }
 
-        } catch (error: any) {
-            message.error(error.message)
-        }
+        // } catch (error: any) {
+        //     message.error(error.message)
+        // }
     }
 
 
@@ -87,17 +87,17 @@ const HomeCategory: React.FC = () => {
 
     useEffect(() => {
         async function fetchProduct() {
-            const { data } = await getAllCate();
+            // const { data } = await getAllCate();
 
-            setCate(
-                data.map((item: ICategory, index: number) => {
-                    return {
-                        key: item._id,
-                        index: index + 1,
-                        name: item.name,
+            // setCate(
+            //     data.map((item: ICategory, index: number) => {
+            //         return {
+            //             key: item._id,
+            //             index: index + 1,
+            //             name: item.name,
 
-                    }
-                }))
+            //         }
+            //     }))
         }
 
         fetchProduct()

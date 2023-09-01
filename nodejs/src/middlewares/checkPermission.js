@@ -9,7 +9,7 @@ export const checkPermission = async (req, res, next) => {
     }
     const token = req.headers.authorization.split(" ")[1];
 
-    const { id } = jwt.verify(token, "123456", async (err, decoded) => {
+    const { id } = jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
         // console.log(err);
         // console.log(decoded);
         if (err === "JsonWebTokenError") {

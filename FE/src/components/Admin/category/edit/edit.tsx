@@ -5,7 +5,7 @@ import SideBar from '../../sideBar/sideBar';
 import { Option } from 'antd/es/mentions';
 import { useNavigate, useParams } from 'react-router-dom';
 import ICategory from '../../../../interfaces/category';
-import { editCate, getCateById } from '../../../../api/category';
+// import { editCate, getCateById } from '../../../../api/category';
 
 
 
@@ -21,11 +21,11 @@ const EditCategory = () => {
 
 
     const getCategory = async () => {
-        if (id) {
-            const { data } = await getCateById(id);
-            setCate(data);
-            form.setFieldsValue(data); // cập nhật giá trị của form khi pro thay đổi
-        }
+        // if (id) {
+        //     const { data } = await getCateById(id);
+        //     setCate(data);
+        //     form.setFieldsValue(data); // cập nhật giá trị của form khi pro thay đổi
+        // }
     };
 
     useEffect(() => {
@@ -36,15 +36,15 @@ const EditCategory = () => {
         console.log(values);
         if (id) {
             try {
-                const { data } = await editCate(values, id);
-                if (data) {
-                    message.success('Cập nhật sản phẩm thành công')
-                    setTimeout(() => {
-                        navigate('/admin/cate')
-                    }, 1000)
-                } else {
-                    message.error('Cập nhật sản phẩm thất bại')
-                }
+                // const { data } = await editCate(values, id);
+                // if (data) {
+                //     message.success('Cập nhật sản phẩm thành công')
+                //     setTimeout(() => {
+                //         navigate('/admin/cate')
+                //     }, 1000)
+                // } else {
+                //     message.error('Cập nhật sản phẩm thất bại')
+                // }
             } catch (error: any) {
                 message.error(error.message)
             }

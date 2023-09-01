@@ -1,9 +1,9 @@
 import React from 'react'
 import { useForm } from "react-hook-form"
-import { signupUser } from '../../../api/user'
 import IUser from '../../../interfaces/user'
-import { message } from 'antd'
+import { Space, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { useSignupMutation } from '../../../api/user'
 const Signup = () => {
     type Props = {}
     const {
@@ -12,20 +12,32 @@ const Signup = () => {
         formState: { errors }
     } = useForm()
     const navigate = useNavigate()
-    const checkSignup = async (user: IUser) => {
-        try {
-            const users = await signupUser(user)
-            if (users) {
-                message.success('Đăng ký thành công')
-                setTimeout(() => {
-                    navigate("/signin");
-                }, 1000)
-            } else {
-                throw new Error('Đăng ký không thành công')
-            }
-        } catch (error: any) {
-            message.error(error.message)
-        }
+    const [registers] = useSignupMutation()
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'Đăng ký thành công',
+        });
+    };
+
+    const error = (err: any) => {
+        messageApi.open({
+            type: 'error',
+            content: err,
+        });
+    };
+    const checkSignup = (user: any) => {
+        registers(user).unwrap().then(() => {
+            setTimeout(() => {
+                navigate('/signin')
+
+            }, 2000);
+            success()
+        }).catch((err) => {
+            error(err.data.message);
+        })
     }
     return (
         <div className='container mx-auto w-1/2'>
@@ -57,15 +69,17 @@ const Signup = () => {
                     {errors.pasword && <span>Mat khau khong duoc bo trong</span>}
 
                 </div>
-
                 <div className='text-center'>
-                    <button type="submit" className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Đăng ký</button>
-
+                    {contextHolder}
+                    <Space>
+                        <button type="submit" className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Đăng ký</button>
+                    </Space>
                 </div>
             </form>
 
         </div>
     )
 }
+
 
 export default Signup

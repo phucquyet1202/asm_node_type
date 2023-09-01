@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Form, Input, Layout, Select, message } from 'antd';
 import SideBar from '../../sideBar/sideBar';
-import { getAllCate } from '../../../../api/category';
+// import { getAllCate } from '../../../../api/category';
 import { IProduct } from '../../../../interfaces/product';
 import { Option } from 'antd/es/mentions';
-import { addProduct } from '../../../../api/product';
+// import { addProduct } from '../../../../api/product';
 import { useNavigate } from 'react-router-dom';
 import ICategory from '../../../../interfaces/category';
 const AddProduct = () => {
     const navigate = useNavigate()
     const onFinish = async (values: IProduct) => {
         console.log(values);
-        try {
-            const checkAdd = await addProduct(values);
-            if (checkAdd) {
-                message.success('Thêm sản phẩm thành công!');
-                setTimeout(() => {
-                    navigate("/admin")
-                }, 1000);
-            } else {
-                throw new Error('Thêm sản phẩm thất bại!');
-            }
-        } catch (error: any) {
-            message.error(error.message)
-        }
+        // try {
+        //     const checkAdd = await addProduct(values);
+        //     if (checkAdd) {
+        //         message.success('Thêm sản phẩm thành công!');
+        //         setTimeout(() => {
+        //             navigate("/admin")
+        //         }, 1000);
+        //     } else {
+        //         throw new Error('Thêm sản phẩm thất bại!');
+        //     }
+        // } catch (error: any) {
+        //     message.error(error.message)
+        // }
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -34,12 +34,12 @@ const AddProduct = () => {
 
     const [cate, setCate] = useState<ICategory[]>([])
     const getCate = async () => {
-        try {
-            const { data } = await getAllCate()
-            setCate(data);
-        } catch (error) {
-            console.log(error);
-        }
+        //     try {
+        //         const { data } = await getAllCate()
+        //         setCate(data);
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
     }
     useEffect(() => {
         getCate()

@@ -6,8 +6,8 @@ import loda from 'lodash'
 import { productSchema } from "../Schema/Schema_product";
 export const getAll = async (req, res) => {
     try {
-        const data = await Product.find().populate("brand")
-        console.log(data);
+        const data = await Product.find().populate("brand").populate("comments")
+        // console.log(data);
         if (data.length === 0) {
             return res.status(200).json({
                 message: "Không có dữ liệu",
@@ -22,7 +22,15 @@ export const getAll = async (req, res) => {
 };
 export const get = async (req, res) => {
     try {
-        const data = await Product.findById(req.params.id).populate("brand");
+        const data = await Product.findById(req.params.id)
+            .populate("brand")
+            .populate({
+                path: "comments",
+                populate: [
+                    {
+                        path: "user",
+                    }],
+            });
         // console.log(data);
         if (data.length === 0) {
             return res.status(200).json({

@@ -17,6 +17,12 @@ const productSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
     },
+    comments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Comment",
+        },
+    ],
 }, { timestamps: true, versionKey: false })
 
 export default mongoose.model('Product', productSchema)

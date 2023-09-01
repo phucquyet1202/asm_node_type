@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Form, Input, Layout, Select, message } from 'antd';
 import SideBar from '../../sideBar/sideBar';
-import { addCate, getAllCate } from '../../../../api/category';
+// import { addCate, getAllCate } from '../../../../api/category';
 import { IProduct } from '../../../../interfaces/product';
 import { Option } from 'antd/es/mentions';
-import { addProduct } from '../../../../api/product';
+// import { addProduct } from '../../../../api/product';
 import { useNavigate } from 'react-router-dom';
 import ICategory from '../../../../interfaces/category';
 
@@ -13,15 +13,15 @@ const AddCategory = () => {
     const onFinish = async (values: ICategory) => {
         // console.log(values);
         try {
-            const checkAdd = await addCate(values);
-            if (checkAdd) {
-                message.success('Thêm danh mục thành công!');
-                setTimeout(() => {
-                    navigate('/admin/cate')
-                }, 1000);
-            } else {
-                throw new Error('Thêm danh mục thất bại!');
-            }
+            // const checkAdd = await addCate(values);
+            // if (checkAdd) {
+            //     message.success('Thêm danh mục thành công!');
+            //     setTimeout(() => {
+            //         navigate('/admin/cate')
+            //     }, 1000);
+            // } else {
+            //     throw new Error('Thêm danh mục thất bại!');
+            // }
         } catch (error: any) {
             message.error(error.message)
         }

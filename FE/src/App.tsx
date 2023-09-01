@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import UserLayout from './components/User/layout/UserLayout'
 import HomePage from './components/User/home/homePage'
@@ -15,22 +15,28 @@ import ErrorPage from './components/User/errorPage/errorPage'
 import EditCategory from './components/Admin/category/edit/edit'
 import { message } from 'antd'
 import Cart from './components/User/cart/cart'
+import { useGetUserByTokenMutation } from './api/user'
 
 function App() {
   const [count, setCount] = useState(0)
-  const user = JSON.parse(sessionStorage.getItem('user')!)
-
-  console.log(user);
+  const [user, setUser] = useState<any>(null)
+  const token = localStorage.getItem('token')
+  const [getUser] = useGetUserByTokenMutation()
+  useEffect(() => {
+    if (token) {
+      getUser(token).unwrap().then(res => setUser(res.data));
+    }
+  }, [getUser, token])
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/signup' element={<Signup />} />
         <Route path='/signin' element={<Signin />} />
 
-        <Route path='/' element={<UserLayout />}> {/* user Layout */}
+        <Route path='/' element={<UserLayout user={user} />}> {/* user Layout */}
           <Route index element={<HomePage />} />
-          <Route path='chi-tiet/:id' element={<DetailProductPage />} />
-          <Route path='cart' element={<Cart />} />
+          <Route path='chi-tiet/:id' element={<DetailProductPage user={user} />} />
+          <Route path='cart' element={<Cart user={user} />} />
 
         </Route>
 

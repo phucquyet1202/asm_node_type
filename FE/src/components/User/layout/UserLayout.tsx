@@ -3,9 +3,9 @@ import Header from '../header_navbar_footer/header'
 import NavBar from '../header_navbar_footer/NavBar'
 import Footer from '../header_navbar_footer/footer'
 import '../../../index.css'
-const UserLayout = () => {
+const UserLayout = ({ user }: any) => {
   return <div>
-    <Header />
+    <Header user={user} />
     <NavBar />
     <Outlet />
     <Footer />

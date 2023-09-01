@@ -3,7 +3,6 @@ import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/i
 import { Button, Image, Layout, Menu, Popconfirm, Space, Table, Tag, message, theme } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { IProduct } from '../../../../interfaces/product';
-import { deleProduct, getAll } from '../../../../api/product';
 import { Link, useNavigate } from 'react-router-dom';
 import AddProduct from '../add/addproduct';
 import SideBar from '../../sideBar/sideBar';
@@ -21,21 +20,21 @@ const HomeProduct: React.FC = () => {
 
 
     const checkDelete = async (id: string) => {
-        try {
-            const data = await deleProduct(id)
-            if (data) {
-                message.success('xóa thành công')
-                setTimeout(() => {
-                    navigate("/admin")
-                    window.location.reload()
-                }, 1000);
-            } else {
-                throw new Error('xóa sản phẩm thất bại')
-            }
+        // try {
+        //     const data = await deleProduct(id)
+        //     if (data) {
+        //         message.success('xóa thành công')
+        //         setTimeout(() => {
+        //             navigate("/admin")
+        //             window.location.reload()
+        //         }, 1000);
+        //     } else {
+        //         throw new Error('xóa sản phẩm thất bại')
+        //     }
 
-        } catch (error: any) {
-            message.error(error.message)
-        }
+        // } catch (error: any) {
+        //     message.error(error.message)
+        // }
     }
 
 
@@ -100,18 +99,18 @@ const HomeProduct: React.FC = () => {
     const [products, setProducts] = useState<DataType[]>([]);
 
     const getProductData = async () => {
-        const { data }: any = await getAll();
-        setProducts(data.map((item: IProduct) => {
+        // const { data }: any = await getAll();
+        // setProducts(data.map((item: IProduct) => {
 
-            return {
-                key: item._id,
-                name: item.name,
-                price: item.price,
-                short_description: item.short_description,
-                images: item.images[0].base_url,
-                categoryId: item.brand?.name
-            }
-        }));
+        //     return {
+        //         key: item._id,
+        //         name: item.name,
+        //         price: item.price,
+        //         short_description: item.short_description,
+        //         images: item.images[0].base_url,
+        //         categoryId: item.brand?.name
+        //     }
+        // }));
 
     };
 

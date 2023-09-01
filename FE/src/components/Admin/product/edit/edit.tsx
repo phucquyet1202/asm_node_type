@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Form, Input, Layout, Select, message } from 'antd';
 import SideBar from '../../sideBar/sideBar';
-import { getAllCate } from '../../../../api/category';
+// import { getAllCate } from '../../../../api/category';
 import { IProduct } from '../../../../interfaces/product';
 import { Option } from 'antd/es/mentions';
-import { addProduct, editProduct, getById } from '../../../../api/product';
+// import { addProduct, editProduct, getById } from '../../../../api/product';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
@@ -20,20 +20,20 @@ const EditProduct = () => {
     const { id } = useParams<{ id: string }>();
 
     const getCate = async () => {
-        try {
-            const { data } = await getAllCate();
-            setCate(data);
-            form.setFieldsValue(data);
-        } catch (error) {
-            console.log(error);
-        }
+        // try {
+        //     const { data } = await getAllCate();
+        //     setCate(data);
+        //     form.setFieldsValue(data);
+        // } catch (error) {
+        //     console.log(error);
+        // }
     };
 
     const getProduct = async () => {
         if (id) {
-            const { data } = await getById(id);
-            setPro(data);
-            form.setFieldsValue(data); // cập nhật giá trị của form khi pro thay đổi
+            // const { data } = await getById(id);
+            // setPro(data);
+            // form.setFieldsValue(data); // cập nhật giá trị của form khi pro thay đổi
         }
     };
 
@@ -46,15 +46,15 @@ const EditProduct = () => {
         console.log(values);
         if (id) {
             try {
-                const { data } = await editProduct(values, id);
-                if (data) {
-                    message.success('Cập nhật sản phẩm thành công')
-                    setTimeout(() => {
-                        navigate('/admin')
-                    }, 1000)
-                } else {
-                    message.error('Cập nhật sản phẩm thất bại')
-                }
+                // const { data } = await editProduct(values, id);
+                // if (data) {
+                //     message.success('Cập nhật sản phẩm thành công')
+                //     setTimeout(() => {
+                //         navigate('/admin')
+                //     }, 1000)
+                // } else {
+                //     message.error('Cập nhật sản phẩm thất bại')
+                // }
             } catch (error: any) {
                 message.error(error.message)
             }

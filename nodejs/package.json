@@ -30,6 +30,7 @@
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "mongoose": "^7.3.1",
+    "pnpm": "^8.6.12",
     "vite": "^4.3.9",
     "vite-plugin-node": "^3.0.2"
   }

@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import IUser from '../../../interfaces/user'
 import { useForm } from "react-hook-form"
 import { useNavigate } from 'react-router-dom';
-import { signinUser } from '../../../api/user'
-import { message } from 'antd'
+// import { signinUser } from '../../../api/user'
+import { Space, message } from 'antd'
 // import { AxiosResponse } from 'axios';
 
 import ISignin from '../../../interfaces/signin';
+import { useSigninMutation } from '../../../api/user';
 
 const Signin = () => {
     type Props = {}
@@ -16,22 +17,33 @@ const Signin = () => {
         formState: { errors }
     } = useForm()
     const navigate = useNavigate();
+    const [login] = useSigninMutation()
+    const [messageApi, contextHolder] = message.useMessage();
 
-    const checkSignin = async (user: ISignin) => {
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'Đăng nhập thành công',
+        });
+    };
 
-        try {
-            let checkLogin = await signinUser(user);
-            if (checkLogin) {
-                message.success('Đăng nhập thành công!');
-                setTimeout(() => {
-                    navigate('/')
-                }, 1000);
-            } else {
-                throw new Error('Đăng nhập thất bại!');
-            }
-        } catch (error: any) {
-            message.error(error.message);
-        }
+    const error = (err: any) => {
+        messageApi.open({
+            type: 'error',
+            content: err,
+        });
+    };
+    const checkSignin = async (user: any) => {
+        login(user).unwrap().then((res) => {
+            window.localStorage.setItem('token', res.token)
+            setTimeout(() => {
+                navigate('/')
+
+            }, 2000);
+            success()
+        }).catch((err) => {
+            error(err.data.message)
+        })
     }
 
     return (
@@ -56,8 +68,10 @@ const Signin = () => {
                 </div>
 
                 <div className='text-center'>
-                    <button type="submit" id='submit' className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Đăng Nhập</button>
-
+                    {contextHolder}
+                    <Space>
+                        <button type="submit" id='submit' className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Đăng Nhập</button>
+                    </Space>
                 </div>
             </form>
 
