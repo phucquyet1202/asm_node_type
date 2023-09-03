@@ -74,6 +74,7 @@ export const create = async (req, res) => {
     }
 };
 export const update = async (req, res) => {
+    console.log(req.body);
     try {
         const { error } = productSchema.validate(req.body)
         if (error) {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Form, Input, Layout, Select, message } from 'antd';
+import { Button, Checkbox, Form, Input, Layout, Select, Space, message } from 'antd';
 import SideBar from '../../sideBar/sideBar';
 
 import { Option } from 'antd/es/mentions';
 import { useNavigate, useParams } from 'react-router-dom';
 import ICategory from '../../../../interfaces/category';
+import { useGetOneCateQuery, useUpdateCateMutation } from '../../../../api/category';
 // import { editCate, getCateById } from '../../../../api/category';
 
 
@@ -12,45 +13,38 @@ import ICategory from '../../../../interfaces/category';
 
 
 const EditCategory = () => {
-    const [cate, setCate] = useState<ICategory>({} as ICategory);
     const [form] = Form.useForm();
     const navigate = useNavigate()
+    const { id } = useParams();
+    const { data: cate } = useGetOneCateQuery(id)
+    const [update] = useUpdateCateMutation()
+    const [messageApi, contextHolder] = message.useMessage();
 
-    const { id } = useParams<{ id: string }>();
-
-
-
-    const getCategory = async () => {
-        // if (id) {
-        //     const { data } = await getCateById(id);
-        //     setCate(data);
-        //     form.setFieldsValue(data); // cập nhật giá trị của form khi pro thay đổi
-        // }
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'This is a success message',
+        });
     };
 
+    const error = () => {
+        messageApi.open({
+            type: 'error',
+            content: 'This is an error message',
+        });
+    };
     useEffect(() => {
-        getCategory();
-    }, [id]);
+        form.setFieldsValue(cate)
+    }, [cate]);
 
-    const onFinish = async (values: ICategory,) => {
-        console.log(values);
-        if (id) {
-            try {
-                // const { data } = await editCate(values, id);
-                // if (data) {
-                //     message.success('Cập nhật sản phẩm thành công')
-                //     setTimeout(() => {
-                //         navigate('/admin/cate')
-                //     }, 1000)
-                // } else {
-                //     message.error('Cập nhật sản phẩm thất bại')
-                // }
-            } catch (error: any) {
-                message.error(error.message)
-            }
-        }
-
-
+    const onFinish = async (values: ICategory) => {
+        update({ ...values, _id: id }).unwrap()
+            .then(() => {
+                success()
+                setTimeout(() => {
+                    navigate('/admin/cate')
+                }, 2000);
+            })
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -78,7 +72,6 @@ const EditCategory = () => {
                     rules={[{ required: true, message: 'Tên thương hiệu không được bỏ trống!' }]}
                 >
                     <Input
-                        value={cate.name}
 
                     />
                 </Form.Item>
@@ -88,15 +81,17 @@ const EditCategory = () => {
                     rules={[{ required: true, message: 'Tên danh mục không được bỏ trống!' }]}
                 >
                     <Input
-                        value={cate.name}
 
                     />
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 11, span: 16 }} >
-                    <Button type="primary" htmlType="submit" className='bg-blue-500'>
-                        Submit
-                    </Button>
+                    {contextHolder}
+                    <Space>
+                        <Button type="primary" htmlType="submit" className='bg-blue-500'>
+                            Submit
+                        </Button>
+                    </Space>
                 </Form.Item>
             </Form>
         </Layout>

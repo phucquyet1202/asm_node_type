@@ -1,49 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Form, Input, Layout, Select, message } from 'antd';
+import React from 'react';
+import { Button, Checkbox, Form, Input, Layout, Select, Space, message } from 'antd';
 import SideBar from '../../sideBar/sideBar';
-// import { getAllCate } from '../../../../api/category';
 import { IProduct } from '../../../../interfaces/product';
 import { Option } from 'antd/es/mentions';
-// import { addProduct } from '../../../../api/product';
 import { useNavigate } from 'react-router-dom';
 import ICategory from '../../../../interfaces/category';
+import { useGetAllCateQuery } from '../../../../api/category';
+import { useAddProductMutation } from '../../../../api/product';
 const AddProduct = () => {
     const navigate = useNavigate()
-    const onFinish = async (values: IProduct) => {
-        console.log(values);
-        // try {
-        //     const checkAdd = await addProduct(values);
-        //     if (checkAdd) {
-        //         message.success('Thêm sản phẩm thành công!');
-        //         setTimeout(() => {
-        //             navigate("/admin")
-        //         }, 1000);
-        //     } else {
-        //         throw new Error('Thêm sản phẩm thất bại!');
-        //     }
-        // } catch (error: any) {
-        //     message.error(error.message)
-        // }
+    const { data: cate } = useGetAllCateQuery()
+    const [addproduct] = useAddProductMutation()
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'This is a success message',
+        });
+    };
+
+    const error = () => {
+        messageApi.open({
+            type: 'error',
+            content: 'This is an error message',
+        });
+    };
+    const onFinish = (values: IProduct) => {
+        addproduct(values)
+            .unwrap()
+            .then(() => {
+                success()
+                setTimeout(() => {
+                    navigate('/admin')
+                }, 5000);
+            })
     };
 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
 
-
-
-    const [cate, setCate] = useState<ICategory[]>([])
-    const getCate = async () => {
-        //     try {
-        //         const { data } = await getAllCate()
-        //         setCate(data);
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-    }
-    useEffect(() => {
-        getCate()
-    }, [])
     return (
         <Layout className='h-full'>
 
@@ -107,7 +104,7 @@ const AddProduct = () => {
                             rules={[{ required: true, message: 'Province is required' }]}
                         >
                             <Select placeholder="Danh mục">
-                                {cate.map((item) => {
+                                {cate?.map((item: any) => {
                                     return (
                                         <Option value={item._id}>{item.name}</Option>
                                     )
@@ -119,11 +116,14 @@ const AddProduct = () => {
                     </Input.Group>
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 11, span: 16 }} >
-                    <Button type="primary" htmlType="submit" className='bg-blue-500'>
-                        Submit
-                    </Button>
-                </Form.Item>
+                {contextHolder}
+                <Space>
+                    <Form.Item wrapperCol={{ offset: 11, span: 16 }} >
+                        <Button type="primary" htmlType="submit" className='bg-blue-500'>
+                            Submit
+                        </Button>
+                    </Form.Item>
+                </Space>
             </Form>
         </Layout>
     )

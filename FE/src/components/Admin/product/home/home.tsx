@@ -1,46 +1,51 @@
 import React, { useEffect, useState } from 'react';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Button, Image, Layout, Menu, Popconfirm, Space, Table, Tag, message, theme } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { IProduct } from '../../../../interfaces/product';
 import { Link, useNavigate } from 'react-router-dom';
 import AddProduct from '../add/addproduct';
 import SideBar from '../../sideBar/sideBar';
-const HomeProduct: React.FC = () => {
+import { useGetAllProductQuery, useRemoveProductMutation } from '../../../../api/product';
+const HomeProduct = () => {
 
     const navigate = useNavigate()
     const { Header, Content, Footer, Sider } = Layout;
     interface DataType {
-        key: string;
+        _id: string;
         name: string;
         price: number;
-        images: string[];
+        images: any[];
         short_description: string;
+        brand: any
     }
 
+    const { data: products } = useGetAllProductQuery()
+    const [removePro] = useRemoveProductMutation()
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'This is a success message',
+        });
+    };
+
+    const error = () => {
+        messageApi.open({
+            type: 'error',
+            content: 'This is an error message',
+        });
+    };
 
     const checkDelete = async (id: string) => {
-        // try {
-        //     const data = await deleProduct(id)
-        //     if (data) {
-        //         message.success('xóa thành công')
-        //         setTimeout(() => {
-        //             navigate("/admin")
-        //             window.location.reload()
-        //         }, 1000);
-        //     } else {
-        //         throw new Error('xóa sản phẩm thất bại')
-        //     }
-
-        // } catch (error: any) {
-        //     message.error(error.message)
-        // }
+        removePro(id).unwrap()
+            .then(() => success());
     }
 
 
     const columns: ColumnsType<DataType> = [
         {
-            title: 'Tên sản phẩmphẩm',
+            title: 'Tên sản phẩm',
             dataIndex: "name",
             key: 'name',
         },
@@ -48,7 +53,7 @@ const HomeProduct: React.FC = () => {
             title: 'Ảnh',
             dataIndex: "images",
             key: 'images',
-            render: (text: string) => <Image width={100} src={text} />,
+            render: (text: any) => <Image width={100} src={text?.[0]?.base_url} />,
         },
         {
             title: 'Thành tiền',
@@ -62,8 +67,10 @@ const HomeProduct: React.FC = () => {
         },
         {
             title: 'Danh mục',
-            dataIndex: 'categoryId',
-            key: 'categoryId',
+            dataIndex: 'brand',
+            key: 'brand',
+            render: (text: any) => <p>{text.name}</p>,
+
         },
 
         {
@@ -72,22 +79,24 @@ const HomeProduct: React.FC = () => {
             render: (_, record) => (
                 <Space size="middle">
 
-                    <Button type="primary" onClick={() => navigate(`/admin/edit/${record.key}`)} className='bg-blue-600'>
+                    <Button type="primary" onClick={() => navigate(`/admin/edit/${record._id}`)} className='bg-blue-600'>
                         Edit
                     </Button>
-                    <Popconfirm className='bg-blue-600'
-                        placement="right"
-                        title='Bạn có chắc chắn muốn xóa sản phẩm không'
-                        description='Xóa là nghỉ luôn đấy'
-                        onConfirm={() => checkDelete(record.key)}
-                        okText="Yes"
-                        okButtonProps={{ style: { backgroundColor: '#007bff', color: 'white' } }}
-                        cancelButtonProps={{ style: { backgroundColor: '#dc3545', color: 'white' } }}
-                        cancelText="No"
-                    >
-                        <Button type="primary" danger>Delete</Button>
-                    </Popconfirm>
-
+                    {contextHolder}
+                    <Space>
+                        <Popconfirm className='bg-blue-600'
+                            placement="right"
+                            title='Bạn có chắc chắn muốn xóa sản phẩm không'
+                            description='Xóa là nghỉ luôn đấy'
+                            onConfirm={() => checkDelete(record._id)}
+                            okText="Yes"
+                            okButtonProps={{ style: { backgroundColor: '#007bff', color: 'white' } }}
+                            cancelButtonProps={{ style: { backgroundColor: '#dc3545', color: 'white' } }}
+                            cancelText="No"
+                        >
+                            <Button type="primary" danger>Delete</Button>
+                        </Popconfirm>
+                    </Space>
                 </Space>
             ),
         },
@@ -96,27 +105,6 @@ const HomeProduct: React.FC = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
-    const [products, setProducts] = useState<DataType[]>([]);
-
-    const getProductData = async () => {
-        // const { data }: any = await getAll();
-        // setProducts(data.map((item: IProduct) => {
-
-        //     return {
-        //         key: item._id,
-        //         name: item.name,
-        //         price: item.price,
-        //         short_description: item.short_description,
-        //         images: item.images[0].base_url,
-        //         categoryId: item.brand?.name
-        //     }
-        // }));
-
-    };
-
-    useEffect(() => {
-        getProductData();
-    }, []);
     return (
         <Layout className='h-full'>
 

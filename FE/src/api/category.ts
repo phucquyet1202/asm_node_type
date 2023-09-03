@@ -19,7 +19,7 @@ const categoryApi = createApi({
       providesTags: ["Category"],
     }),
     getOneCate: builder.query<any, any>({
-      query: (id) => `/products/${id}`,
+      query: (id) => `/category/${id}`,
       providesTags: ["Category"],
     }),
     removeCate: builder.mutation<any, any>({
@@ -41,6 +41,7 @@ const categoryApi = createApi({
       query: (pro) => ({
         url: `/category/${pro._id}`,
         method: "PUT",
+        body: pro,
       }),
       invalidatesTags: ["Category"],
     }),

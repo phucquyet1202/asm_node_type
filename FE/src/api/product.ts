@@ -41,6 +41,7 @@ const productApi = createApi({
       query: (pro) => ({
         url: `/products/${pro._id}`,
         method: "PUT",
+        body: pro,
       }),
       invalidatesTags: ["Product"],
     }),

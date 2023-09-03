@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Form, Input, Layout, Select, message } from 'antd';
+import { Button, Checkbox, Form, Input, Layout, Select, Space, message } from 'antd';
 import SideBar from '../../sideBar/sideBar';
 // import { addCate, getAllCate } from '../../../../api/category';
 import { IProduct } from '../../../../interfaces/product';
@@ -7,24 +7,34 @@ import { Option } from 'antd/es/mentions';
 // import { addProduct } from '../../../../api/product';
 import { useNavigate } from 'react-router-dom';
 import ICategory from '../../../../interfaces/category';
+import { useAddCateMutation } from '../../../../api/category';
 
 const AddCategory = () => {
     const navigate = useNavigate()
-    const onFinish = async (values: ICategory) => {
-        // console.log(values);
-        try {
-            // const checkAdd = await addCate(values);
-            // if (checkAdd) {
-            //     message.success('Thêm danh mục thành công!');
-            //     setTimeout(() => {
-            //         navigate('/admin/cate')
-            //     }, 1000);
-            // } else {
-            //     throw new Error('Thêm danh mục thất bại!');
-            // }
-        } catch (error: any) {
-            message.error(error.message)
-        }
+    const [addCate] = useAddCateMutation()
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'This is a success message',
+        });
+    };
+
+    const error = () => {
+        messageApi.open({
+            type: 'error',
+            content: 'This is an error message',
+        });
+    };
+    const onFinish = (values: ICategory) => {
+        addCate(values).unwrap()
+            .then(() => {
+                success()
+                setTimeout(() => {
+                    navigate('/admin/cate')
+                }, 2000);
+            })
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -65,9 +75,12 @@ const AddCategory = () => {
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 11, span: 16 }} >
-                    <Button type="primary" htmlType="submit" className='bg-blue-500'>
-                        Submit
-                    </Button>
+                    {contextHolder}
+                    <Space>
+                        <Button type="primary" htmlType="submit" className='bg-blue-500'>
+                            Submit
+                        </Button>
+                    </Space>
                 </Form.Item>
             </Form>
         </Layout>

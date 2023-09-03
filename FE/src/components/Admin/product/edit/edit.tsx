@@ -1,72 +1,58 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Form, Input, Layout, Select, message } from 'antd';
+import { Button, Checkbox, Form, Input, Layout, Select, Space, message } from 'antd';
 import SideBar from '../../sideBar/sideBar';
 // import { getAllCate } from '../../../../api/category';
 import { IProduct } from '../../../../interfaces/product';
 import { Option } from 'antd/es/mentions';
 // import { addProduct, editProduct, getById } from '../../../../api/product';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useGetAllCateQuery } from '../../../../api/category';
+import { useGetOneProductQuery, useUpdateProductMutation } from '../../../../api/product';
 
 
 
 
 
 const EditProduct = () => {
-    const [cate, setCate] = useState<IProduct[]>([]);
-    const [pro, setPro] = useState<IProduct>({} as IProduct);
     const [form] = Form.useForm();
     const navigate = useNavigate()
+    const { data: cate } = useGetAllCateQuery()
+    const { id } = useParams();
+    const { data: pro } = useGetOneProductQuery(id)
+    const [update] = useUpdateProductMutation()
 
-    const { id } = useParams<{ id: string }>();
+    const [messageApi, contextHolder] = message.useMessage();
 
-    const getCate = async () => {
-        // try {
-        //     const { data } = await getAllCate();
-        //     setCate(data);
-        //     form.setFieldsValue(data);
-        // } catch (error) {
-        //     console.log(error);
-        // }
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'This is a success message',
+        });
     };
 
-    const getProduct = async () => {
-        if (id) {
-            // const { data } = await getById(id);
-            // setPro(data);
-            // form.setFieldsValue(data); // cập nhật giá trị của form khi pro thay đổi
-        }
+    const error = () => {
+        messageApi.open({
+            type: 'error',
+            content: 'This is an error message',
+        });
     };
-
-    useEffect(() => {
-        getCate();
-        getProduct();
-    }, [id]);
-
-    const onFinish = async (values: IProduct) => {
+    const onFinish = (values: IProduct) => {
         console.log(values);
-        if (id) {
-            try {
-                // const { data } = await editProduct(values, id);
-                // if (data) {
-                //     message.success('Cập nhật sản phẩm thành công')
-                //     setTimeout(() => {
-                //         navigate('/admin')
-                //     }, 1000)
-                // } else {
-                //     message.error('Cập nhật sản phẩm thất bại')
-                // }
-            } catch (error: any) {
-                message.error(error.message)
-            }
-        }
-
-
+        update({ ...values, _id: id }).unwrap()
+            .then(() => {
+                success()
+                setTimeout(() => {
+                    navigate('/admin')
+                }, 2000);
+            })
     };
 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-
+    useEffect(() => {
+        form.setFieldsValue(pro)
+    }, [pro])
     return (
         <>
 
@@ -89,7 +75,6 @@ const EditProduct = () => {
                     rules={[{ required: true, message: 'Tên sản phẩm không được bỏ trống!' }]}
                 >
                     <Input
-                        value={pro.name}
 
                     />
                 </Form.Item>
@@ -98,14 +83,14 @@ const EditProduct = () => {
                     name="price"
                     rules={[{ required: true, message: 'Giá sản phẩm không được bỏ trông' }]}
                 >
-                    <Input type='number' value={pro.price} />
+                    <Input type='number' />
                 </Form.Item>
                 <Form.Item
                     label="Giá bán"
                     name="original_price"
                     rules={[{ required: true, message: 'Giá bán không được bỏ trống' }]}
                 >
-                    <Input type='number' value={pro.original_price} />
+                    <Input type='number' />
                 </Form.Item>
 
                 <Form.Item
@@ -113,7 +98,7 @@ const EditProduct = () => {
                     name={["images", 0, "base_url"]}
                     rules={[{ required: true, message: 'Ảnh sản phẩm không được bỏ trống' }]}
                 >
-                    <Input value={pro.images?.[0].base_url} />
+                    <Input />
                 </Form.Item>
 
                 <Form.Item
@@ -121,7 +106,7 @@ const EditProduct = () => {
                     name="short_description"
                     rules={[{ required: true, message: 'Mô tả sản phẩm không được bỏ trốngtrống' }]}
                 >
-                    <Input value={pro.short_description} />
+                    <Input />
                 </Form.Item>
 
                 <Form.Item label="Danh mục">
@@ -133,9 +118,9 @@ const EditProduct = () => {
                             rules={[{ required: true, message: 'Province is required' }]}
                         >
                             <Select placeholder="Danh mục" >
-                                {cate.map((item) => {
+                                {cate?.map((item: any) => {
                                     return (
-                                        <Option value={item._id}>{item.name}</Option>
+                                        <Option value={item?._id}>{item?.name}</Option>
                                     )
                                 })}
 
@@ -146,9 +131,12 @@ const EditProduct = () => {
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 11, span: 16 }} >
-                    <Button type="primary" htmlType="submit" className='bg-blue-500'>
-                        Submit
-                    </Button>
+                    {contextHolder}
+                    <Space>
+                        <Button type="primary" htmlType="submit" className='bg-blue-500'>
+                            Submit
+                        </Button>
+                    </Space>
                 </Form.Item>
             </Form>
         </>
