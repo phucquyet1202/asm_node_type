@@ -72,15 +72,17 @@ const Comment = ({ user }: any) => {
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Discussion (20)</h2>
                 </div>
-                <form className="mb-6">
+                <div className="mb-6">
                     <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                         <label htmlFor="Comment" className="sr-only">Your Comment</label>
                         <textarea id="Comment" onChange={(value: any) => setComment(value.target.value)} rows={6} className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800" placeholder="Write button Comment..." required defaultValue={""} />
                     </div>
-                    <button onClick={() => handleSubmit()} className="inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-white bg-red-400 hover:bg-red-500 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                    {user ? (<button onClick={() => handleSubmit()} className="inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-white bg-red-400 hover:bg-red-500 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                         Post Comment
-                    </button>
-                </form>
+                    </button>) : (<button className="inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-white bg-red-400 hover:bg-red-500 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                        Post Comment
+                    </button>)}
+                </div>
                 {product?.comments?.map((item: any) => (
                     <div key={item?._id}>
                         {contextHolder}

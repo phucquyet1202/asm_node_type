@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { IProduct } from '../../../interfaces/product'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { useSearchProductMutation } from '../../../api/product'
 type Props = {
     data: IProduct
 }
 const ProductPage = ({ data }: Props) => {
     // console.log(data);
+
     return (
 
         <div className='my-8  '>

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const { Schema } = mongoose
+const { Schema } = mongoose;
+
 const productSchema = new Schema({
     name: {
         type: String
@@ -12,7 +13,6 @@ const productSchema = new Schema({
             base_url: String
         }
     ],
-
     brand: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
@@ -23,7 +23,6 @@ const productSchema = new Schema({
             ref: "Comment",
         },
     ],
-}, { timestamps: true, versionKey: false })
+}, { timestamps: true, versionKey: false });
 
-export default mongoose.model('Product', productSchema)
-
+export default mongoose.model('Product', productSchema);

@@ -54,13 +54,6 @@ export const create = async (req, res) => {
             });
         }
         const product = await Product.create(req.body);
-
-        // Thêm ObjectId vào thuộc tính products trong model Category
-        // await Category.findByIdAndUpdate(product.categoryId, {
-        //     $addToSet: {
-        //         products: product._id,
-        //     },
-        // });
         if (product.length === 0) {
             return res.status(200).json({
                 message: "Không thêm được sản phẩm",
@@ -108,27 +101,20 @@ export const remove = async (req, res) => {
     }
 };
 
-// tim kiem
-// export const search = async (req, res) => {
-//     try {
-//         const searchQuery = req.params.name.toLowerCase();
-//         const products = await Product.find({});
-//         const filteredProducts = products.filter((product) => {
-//             return product.name.toLowerCase().includes(searchQuery);
-//         });
-//         if (filteredProducts.length === 0) {
-//             return res.status(404).json({
-//                 message: 'Không tìm thấy sản phẩm',
-//             });
-//         }
-//         return res.status(200).json({
-//             message: 'Tìm kiếm sản phẩm thành công',
-//             products: filteredProducts,
-//         });
-//     } catch (error) {
-//         return res.status(500).json({
-//             message: 'Lỗi server',
-//             error: error,
-//         });
-//     }
-// }
+// search
+export const search = async (req, res) => {
+    try {
+        const { name } = req.body; // Lấy tên sản phẩm từ req.body
+        // console.log(name); // In ra tên sản phẩm
+        const data = await Product.find({
+            name: {
+                $regex: name,
+                $options: 'i', // Tìm kiếm không phân biệt chữ hoa, chữ thường
+            },
+        }).populate('brand'); // Tìm sản phẩm dựa trên tên và populate thông tin thương hiệu (brand)
+        return res.status(200).json({ message: 'Tìm sản phẩm thành công', data: data });
+    } catch (error) {
+        console.log(error);
+        return res.status(404).json({ message: error.message })
+    }
+}

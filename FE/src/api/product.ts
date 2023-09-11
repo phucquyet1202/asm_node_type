@@ -45,6 +45,14 @@ const productApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+    searchProduct: builder.mutation<any, any>({
+      query: (name) => ({
+        url: `/products/search`,
+        method: "POST",
+        body: name,
+      }),
+      // invalidatesTags: ["Product"],
+    }),
     createComments: builder.mutation({
       query: (data: any) => ({
         url: `/comments`,
@@ -70,5 +78,6 @@ export const {
   useUpdateProductMutation,
   useCreateCommentsMutation,
   useDeleteCommentsMutation,
+  useSearchProductMutation,
 } = productApi;
 export default productApi;
